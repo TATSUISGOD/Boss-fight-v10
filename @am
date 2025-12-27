@@ -1,0 +1,63 @@
+br><br>
+<button onclick="startRush()">🔥 ボスラッシュ</button>
+</div>
+
+<div id="game" class="hidden">
+<h2 id="bossName"></h2>
+<div class="boss" id="bossIcon"></div>
+<div class="hp-bar"><div class="hp" id="hp"></div></div>
+<p>HP: <span id="hpText"></span></p>
+<button id="tapBtn">タップ！</button>
+</div>
+
+<div id="overlay" class="overlay hidden"></div>
+
+<script>
+let coin=+localStorage.getItem("coin")||0;
+let dia=+localStorage.getItem("dia")||0;
+let atkBonus=+localStorage.getItem("atkBonus")||0;
+let dex=JSON.parse(localStorage.getItem("dex")||"{}");
+
+let bossHp=0,maxHp=0,reward=0;
+let rush=false,rushKills=0,rushEnd=0;
+
+const coinEl=document.getElementById("coin");
+const diaEl=document.getElementById("dia");
+const atkEl=document.getElementById("atk");
+const overlay=document.getElementById("overlay");
+const player=document.getElementById("player");
+
+function hideOverlay(){overlay.classList.add("hidden");overlay.innerHTML=""}
+overlay.onclick=hideOverlay;
+
+function showOverlay(html){
+overlay.innerHTML=html+"<br><br><small>(タップで閉じる)</small>";
+overlay.classList.remove("hidden");
+}
+
+function save(){
+localStorage.setItem("coin",coin);
+localStorage.setItem("dia",dia);
+localStorage.setItem("atkBonus",atkBonus);
+localStorage.setItem("dex",JSON.stringify(dex));
+coinEl.textContent=coin;
+diaEl.textContent=dia;
+atkEl.textContent=atkBonus.toFixed(1);
+player.textContent=atkBonus>=10?"👑🔥":atkBonus>=5?"😎✨":"🙂";
+}
+save();
+
+/* ===== バトル ===== */
+function startBattle(n,h,i,r){
+hideOverlay();
+rush=false;
+bossName.textContent=n;
+bossIcon.textContent=i;
+bossHp=maxHp=h;
+reward=r;
+select.classList.add("hidden");
+game.classList.remove("hidden");
+updateHp();
+}
+
+tapBtn.onclick=()=
